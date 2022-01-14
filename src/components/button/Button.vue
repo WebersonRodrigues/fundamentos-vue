@@ -18,7 +18,7 @@ export default {
         width: 100%;
         background-color: var(--cor-primaria);
         color: #FFF;
-        padding: 14px 20px;
+        padding: 8px 20px;
         margin: 8px 0;
         border: none;
         border-radius: 4px;

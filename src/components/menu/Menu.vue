@@ -1,5 +1,5 @@
 <template>
-    <ul>
+    <ul class="menu">
         <li>
             <a @click="() => this.$router.push({path:'/'})">Dashboard</a>
         </li>
@@ -37,7 +37,7 @@
         margin-right: 10px;
     }
 
-    li a {
+    ul.menu li a {
         display: block;
         color: #FFF;
         padding: 15px 17px;
