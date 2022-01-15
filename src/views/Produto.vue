@@ -104,21 +104,31 @@ export default {
         obterProdutoPorId(id){
             produtoService.obterPorId(id)
             .then(response => {
-
                 this.produto = new Produto(response.data);
             })
             .catch(error =>{
                 console.log(error)
+                this.$swal({
+                  icon: 'error',
+                  title: 'Não foi possível obter o produto pelo id ' + id,
+                  confirmButtonColor: '#FF3D00',
+                  animate: true
+                });
             })
         },
+
         cancelarAcao(){
             this.produto = new Produto();
             this.$router.push({name: "ControleDeProdutos"})
         },
-
         codastrarProduto(){
             if(!this.produto.modeloValidoParaCadastro()){
-                alert("O nome do produto é obrigatório para o cadastro.");
+                this.$swal({
+                  icon: 'warning',
+                  title: 'O nome do produto é obrigatório para o cadastro.',
+                  confirmButtonColor: '#FF3D00',
+                  animate: true
+                });
                 return;
             }
 
@@ -127,7 +137,13 @@ export default {
         
             produtoService.cadastrar(this.produto)
             .then(() => {
-                alert("Produto cadastrado com sucesso!");
+                this.$swal({
+                  icon: 'success',
+                  title: 'Produto cadastrado com sucesso!',
+                  confirmButtonColor: '#FF3D00',
+                  animate: true
+                });
+
                 this.produto = new Produto();
 
                 if(!this.continuarAdicionando){
@@ -136,12 +152,23 @@ export default {
             })
             .catch(error =>{
                 console.log(error);
+                this.$swal({
+                  icon: 'error',
+                  title: 'Não foi possível cadastrar o produto',
+                  confirmButtonColor: '#FF3D00',
+                  animate: true
+                });
             });
         },
 
         atualizarProduto(){
             if(!this.produto.modeloValidoParaAtualizar()){
-                alert("O código e nome do produto são obrigatórios para o cadastro.");
+                this.$swal({
+                  icon: 'warning',
+                  title: 'O código e nome do produto são obrigatórios para o cadastro.',
+                  confirmButtonColor: '#FF3D00',
+                  animate: true
+                });
                 return;
             }
             
@@ -150,11 +177,22 @@ export default {
 
             produtoService.atualizar(this.produto)
             .then(() =>{
-                alert("Produto atualizado com sucesso!");
+                this.$swal({
+                  icon: 'success',
+                  title: 'Produto atualizado com sucesso!',
+                  confirmButtonColor: '#FF3D00',
+                  animate: true
+                });
                 this.$router.push({name: "ControleDeProdutos"});
             })
             .catch(error => {
                 console.log(error);
+                this.$swal({
+                  icon: 'error',
+                  title: 'Não foi possível atualizar o produto',
+                  confirmButtonColor: '#FF3D00',
+                  animate: true
+                });
             });
         },
 

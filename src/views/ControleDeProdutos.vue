@@ -11,6 +11,9 @@
       <div class="col-sm-2">
         <Button :callback="adicionarProduto" value="Adicionar"></Button>
       </div>
+      <div class="col-sm-10">
+        <a @click="verProdutosEmCards" class="float-right ver-em-cards"> Ver em cards</a>
+      </div>
     </div>
 
     <div class="row">
@@ -34,101 +37,61 @@
               <td>{{ item.valor | real }}</td>
               <td>{{ item.dataCadastro | data }}</td>
               <td>
-                <i @click="editarProduto(item)" class="fas fa-pencil-alt icones-tabela"></i>
-                <i @click="excluirProduto(item)" class="fas fa-trash-alt icones-tabela"></i>
+                <i
+                  @click="editarProduto(item)"
+                  class="fas fa-pencil-alt icones-tabela"
+                ></i>
+                <i
+                  @click="excluirProduto(item)"
+                  class="fas fa-trash-alt icones-tabela"
+                ></i>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+
+
   </div>
 </template>
 <script>
 import Button from "../components/button/Button.vue";
-import produtoService from "@/services/produto-service";
-import Produto from "../models/Produto";
-import conversorMonetario from "../utils/conversor-monetario";
-import conversorDeData from "../utils/conversor-data";
+import ProdutoMixin from '../mixins/produto-mixin';
 
 export default {
   name: "ControleDeProdutos",
+  mixins:[ProdutoMixin],
   components: {
     Button,
   },
-  filters: {
-    data(data) {
-      return conversorDeData.aplicarMascaraEmDataIso(data)
-    },
-    real(valor) {
-      return conversorMonetario.aplicarMascaraParaRealComPrefixo(valor);
-    },
-  },
+
   data() {
     return {
-      produtos: [],
     };
   },
-  mounted() {
-    this.obterTodosOsProdutos();
-  },
+
   methods: {
-
-    adicionarProduto(){
-      this.$router.push({ name: "NovoProduto" })
+    verProdutosEmCards(){
+      this.$router.push({ name: "ListaProdutoCards" });
     },
 
-    editarProduto(produto){
-      this.$router.push({ name: "EditarProduto", params: {id: produto.id } })
-    },
-
-    excluirProduto(produto){
-      
-      if(confirm(`Deseja excluir o produto "${produto.id} - ${produto.nome}"`)){
-        
-        produtoService.deletar(produto.id)
-        .then(() => {
-          let indice = this.produtos.findIndex(p => p.id == produto.id);
-          this.produtos.splice(indice, 1);
-          
-          setTimeout(() =>{
-            alert("Produto excluido com sucesso!");
-          },500);
-     
-        })
-        .catch(error =>{
-          console.log(error);
-        });
-
-      }
-
-    },
-
-    ordernarProdutos(a, b){
-      // A < B = -1
-      // A > B = 1
-      // A == B = 0
-      return (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0;
-    },
-
-    obterTodosOsProdutos() {
-      produtoService
-        .obterTodos()
-        .then((response) => {
-          let produtos = response.data.map((p) => new Produto(p));
-          this.produtos = produtos.reverse();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    adicionarProduto() {
+      this.$router.push({ name: "NovoProduto" });
+    }
   },
 };
 </script>
 <style scoped>
-.icones-tabela{
+
+.icones-tabela,
+.ver-em-cards {
   margin: 5px;
   cursor: pointer;
   color: var(--cor-primaria);
+}
+
+.ver-em-cards {
+  margin-top: 25px;
 }
 </style>

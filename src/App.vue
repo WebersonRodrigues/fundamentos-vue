@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Menu></Menu>
+    <Menu v-if="this.$router.currentRoute.name != 'Login'"></Menu>
     <router-view/>
   </div>
 </template>

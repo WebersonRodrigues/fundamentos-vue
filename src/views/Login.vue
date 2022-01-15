@@ -8,15 +8,17 @@
         <Input
           label="E-mail"
           placeHolder="exemplo@exemplo.com"
+          v-model="usuario.email"
         ></Input>
         
         <Input
           label="Senha"
           placeHolder="123456"
           type="password"
+          v-model="usuario.senha"
         ></Input>
 
-        <Button value="Entrar" :callback="() => alert('Oi')"></Button>
+        <Button value="Entrar" :callback="login"></Button>
         
   
     </div>
@@ -33,7 +35,21 @@ export default {
   },
   data(){
     return {
-
+      usuario:{
+        email:'',
+        senha:''
+      }
+    }
+  },
+  methods:{
+    recebendoValor(valor){
+      alert(valor);
+    },
+    login(){
+      // Aqui enviaria email e senha para api.
+      // Se tudo der certo, eu envio para a tela de controle de produtos.
+      // Caso contrario mandaria uma mensagem de usuário e senha inválidos
+      this.$router.push({name: "ControleDeProdutos"});
     }
   }
 }
