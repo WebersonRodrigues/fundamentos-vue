@@ -24,7 +24,6 @@ export default {
     },
     watch:{
         valor(){
-         
             this.$emit('onChange', this.valor);
         }
     }

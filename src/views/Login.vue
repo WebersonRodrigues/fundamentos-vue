@@ -20,12 +20,14 @@
 
         <Button value="Entrar" :callback="login"></Button>
         
-  
     </div>
 </template>
 <script>
 import Input from '../components/input/Input.vue';
 import Button from '../components/button/Button.vue';
+import Usuario from '../models/Usuario';
+import usuarioService from '../services/usuario-service';
+import utilsStorage from '../utils/storage';
 
 export default {
   name:"Login",
@@ -35,10 +37,7 @@ export default {
   },
   data(){
     return {
-      usuario:{
-        email:'',
-        senha:''
-      }
+      usuario: new Usuario()
     }
   },
   methods:{
@@ -46,10 +45,30 @@ export default {
       alert(valor);
     },
     login(){
-      // Aqui enviaria email e senha para api.
-      // Se tudo der certo, eu envio para a tela de controle de produtos.
-      // Caso contrario mandaria uma mensagem de usuário e senha inválidos
-      this.$router.push({name: "ControleDeProdutos"});
+
+      if(!this.usuario.modeloValidoLogin()){
+        this.$swal({
+            icon: "warning",
+            title: "Email e senha são obrigatórios.",
+            confirmButtonColor: "#FF3D00",
+            animate: true
+          })
+        return;
+      }
+
+      usuarioService
+      .login(this.usuario.email, this.usuario.senha)
+      .then(response => {
+        this.usuario = new Usuario(response.data.usuario);
+
+        utilsStorage.salvarUsuarioNaStorage(this.usuario);
+        utilsStorage.salvarTokenNaStorage(response.data.token);
+        
+        this.$router.push({name: "ControleDeProdutos"});
+      })
+      .catch(error => {
+        console.log(error);
+      })
     }
   }
 }
